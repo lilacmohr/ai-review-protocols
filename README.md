@@ -11,7 +11,7 @@ Built and validated on the [ai-radar](https://github.com/your-org/ai-radar) proj
 ## The Core Idea
 
 Most AI code review tools send a single agent to read a PR. This framework 
-sends **five independent specialized reviewers**, each looking through a 
+sends **nine independent specialized reviewers**, each looking through a 
 different lens, then synthesizes their feedback into a prioritized action list.
 
 The result: higher signal, fewer blind spots, and explicit surfacing of 
@@ -36,7 +36,15 @@ ai-review-protocols/
 │   ├── skeptic.md                   ← assumptions, gaps, optimistic scenarios
 │   ├── security.md                  ← secrets, OAuth, data handling
 │   ├── oss-adoptability.md          ← setup realism, config clarity, docs
-│   └── scope.md                     ← MVP discipline, scope creep
+│   ├── scope.md                     ← MVP discipline, scope creep
+│   ├── domain-expert.md             ← library/API gotchas, real-world data quality
+│   ├── legal-compliance.md          ← content rights, ToS, data retention
+│   ├── operator.md                  ← day-two ops, failure visibility, recovery
+│   └── test-strategy.md             ← testability, verification coverage
+│   ├── domain-expert.md             ← library/API gotchas, real-world data quality
+│   ├── legal-compliance.md          ← content rights, ToS, data retention
+│   ├── operator.md                  ← day-two ops, failure visibility, recovery
+│   └── test-strategy.md             ← testability, verification coverage
 ├── workflows/
 │   ├── spec-review.md               ← which personas + order for spec PRs
 │   └── implementation-review.md     ← for code PRs (coming soon)
@@ -82,12 +90,16 @@ review comment to your PR.
 - `personas/security.md` — Sonnet, medium effort  
 - `personas/oss-adoptability.md` — Sonnet, medium effort
 - `personas/scope.md` — Sonnet, medium effort
+- `personas/domain-expert.md` — Opus, high effort
+- `personas/legal-compliance.md` — Sonnet, medium effort
+- `personas/operator.md` — Sonnet, medium effort
+- `personas/test-strategy.md` — Sonnet, medium effort
 
-**Step 7:** After all five have posted, run the Synthesis Agent:
+**Step 7:** After all nine have posted, run the Synthesis Agent:
 ```
 protocol/synthesis-agent.md
 ```
-Use Opus, high effort. It will read all five reviews and post a 
+Use Opus, high effort. It will read all nine reviews and post a 
 prioritized action list.
 
 **Step 8:** Work from the Synthesis Agent's output. Resolve 
@@ -142,6 +154,10 @@ Don't skip it for the first few runs.
 | Security | Sonnet | medium | Pattern matching against known concerns |
 | OSS Adoptability | Sonnet | medium | Checklist-style usability review |
 | MVP Scope | Sonnet | medium | Judgment against clear criteria |
+| Domain Expert | Opus | high | Domain reasoning benefits from deeper thinking |
+| Legal & Compliance | Sonnet | medium | Pattern recognition against known compliance concerns |
+| Operator | Sonnet | medium | Checklist-style operability review |
+| Test Strategy | Sonnet | medium | Checklist-style testability review |
 | Synthesis | Opus | high | Reasoning across conflicting inputs |
 
 Budget-conscious option: run all personas on Sonnet first. Upgrade 

@@ -5,14 +5,14 @@
 **PR Type:** <!-- Spec / Architecture / Implementation / Docs -->  
 **Date:**  
 **Evaluator:**  
-**Personas run:** <!-- Architect / Skeptic / Security / OSS / Scope -->  
+**Personas run:** <!-- Architect / Skeptic / Security / OSS / Scope / Domain Expert / Legal & Compliance / Operator / Test Strategy -->  
 **Total session time (approx):**
 
 ---
 
 ## 1. Per-Comment Log
 
-One row per comment posted by any reviewer agent. Fill in `Unique?` and `Actionable?` yourself after reading all five reviews.
+One row per comment posted by any reviewer agent. Fill in `Unique?` and `Actionable?` yourself after reading all reviews.
 
 | # | Reviewer | Label | Section | Confidence | Unique? | Actionable? | Addressed? | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -142,6 +142,86 @@ Complete one block per persona after filling in the comment log.
 
 ---
 
+### 🔬 Domain Expert
+| Metric | Count |
+|---|---|
+| Total comments | |
+| BLOCKING | |
+| AMBIGUITY | |
+| FALSE PRECISION | |
+| SUGGESTION | |
+| NIT | |
+| Avg confidence | /10 |
+| Unique findings | / total |
+| Actionable rate | / BLOCKING+AMBIGUITY |
+| Format compliant | Y/N |
+
+**Standout finding:**
+
+**Weakness:**
+
+---
+
+### ⚖️ Legal & Compliance
+| Metric | Count |
+|---|---|
+| Total comments | |
+| BLOCKING | |
+| AMBIGUITY | |
+| FALSE PRECISION | |
+| SUGGESTION | |
+| NIT | |
+| Avg confidence | /10 |
+| Unique findings | / total |
+| Actionable rate | / BLOCKING+AMBIGUITY |
+| Format compliant | Y/N |
+
+**Standout finding:**
+
+**Weakness:**
+
+---
+
+### 🔧 Operator
+| Metric | Count |
+|---|---|
+| Total comments | |
+| BLOCKING | |
+| AMBIGUITY | |
+| FALSE PRECISION | |
+| SUGGESTION | |
+| NIT | |
+| Avg confidence | /10 |
+| Unique findings | / total |
+| Actionable rate | / BLOCKING+AMBIGUITY |
+| Format compliant | Y/N |
+
+**Standout finding:**
+
+**Weakness:**
+
+---
+
+### 🧪 Test Strategy
+| Metric | Count |
+|---|---|
+| Total comments | |
+| BLOCKING | |
+| AMBIGUITY | |
+| FALSE PRECISION | |
+| SUGGESTION | |
+| NIT | |
+| Avg confidence | /10 |
+| Unique findings | / total |
+| Actionable rate | / BLOCKING+AMBIGUITY |
+| Format compliant | Y/N |
+
+**Standout finding:**
+
+**Weakness:**
+
+---
+
 ## 3. Conflict Log
 
 One entry per pair of reviewers that gave conflicting guidance on the same issue.
@@ -192,7 +272,7 @@ Calculate after completing sections 1–4.
 | **Signal density** | (BLOCKING + AMBIGUITY) / total comments | > 50% | % | |
 | **Persona uniqueness** | avg(unique per reviewer) / total comments | > 40% | % | |
 | **Actionability** | addressed / (BLOCKING + AMBIGUITY) | > 70% | % | |
-| **Format compliance** | reviewers on-format / 5 | 5/5 | /5 | |
+| **Format compliance** | reviewers on-format / 9 | 9/9 | /9 | |
 | **Conflict rate** | conflict pairs / total comments | 10–30% | % | |
 | **Confidence calibration** | high-conf comments that were actionable vs low-conf | higher = better | | |
 
@@ -223,6 +303,10 @@ Calculate after completing sections 1–4.
 | OSS Adoptability | |
 | Security | |
 | MVP Scope | |
+| Domain Expert | |
+| Legal & Compliance | |
+| Operator | |
+| Test Strategy | |
 
 ### Persona changes
 <!-- Should any persona be dropped, merged, or replaced? Any new persona worth adding? -->
@@ -241,8 +325,8 @@ Answer these honestly — this is the section most useful for recommending this 
 
 **Did the agents catch anything you genuinely wouldn't have caught in self-review?**
 
-**Did running 5 reviewers find meaningfully more than 1–2 reviewers would have?**
-<!-- If not, which personas were redundant? -->
+**Did running 9 reviewers find meaningfully more than 5 would have?**
+<!-- Which of the four extended personas (Domain Expert, Legal, Operator, Test Strategy) added net-new BLOCKING/AMBIGUITY findings? Which were redundant? -->
 
 **Estimated spec quality improvement from doing this (qualitative):**
 <!-- e.g. "Resolved 3 real ambiguities that would have caused implementation bugs" -->

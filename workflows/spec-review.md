@@ -23,7 +23,7 @@ starts is the highest-leverage use of this review protocol.
 
 ## Personas to Run
 
-Run all five personas in independent sessions (no persona should read 
+Run all nine personas in independent sessions (no persona should read 
 another's comments before posting):
 
 | # | Persona | File | Recommended Model | Effort | Primary Value |
@@ -33,8 +33,12 @@ another's comments before posting):
 | 3 | Security | `personas/security.md` | Sonnet | medium | Secrets, OAuth scope, data handling |
 | 4 | OSS Adoptability | `personas/oss-adoptability.md` | Sonnet | medium | Setup realism, config clarity, docs gaps |
 | 5 | MVP Scope | `personas/scope.md` | Sonnet | medium | Scope creep, over-engineering, MVP integrity |
+| 6 | Domain Expert | `personas/domain-expert.md` | Opus | high | Library/API gotchas, real-world data quality |
+| 7 | Legal & Compliance | `personas/legal-compliance.md` | Sonnet | medium | Content rights, ToS, data retention |
+| 8 | Operator | `personas/operator.md` | Sonnet | medium | Day-two ops, failure visibility, recovery |
+| 9 | Test Strategy | `personas/test-strategy.md` | Sonnet | medium | Testability, verification coverage |
 
-After all five have posted:
+After all nine have posted:
 
 | # | Persona | File | Recommended Model | Effort |
 |---|---|---|---|---|
@@ -59,8 +63,12 @@ At **Level 2** (slash command), run:
 /review-pr $PR_NUMBER security
 /review-pr $PR_NUMBER oss-adoptability
 /review-pr $PR_NUMBER scope
+/review-pr $PR_NUMBER domain-expert
+/review-pr $PR_NUMBER legal-compliance
+/review-pr $PR_NUMBER operator
+/review-pr $PR_NUMBER test-strategy
 ```
-Then after all five have posted:
+Then after all nine have posted:
 ```
 /review-pr $PR_NUMBER synthesis
 ```
@@ -88,10 +96,10 @@ differentiation is measurable.
 
 | Step | Time |
 |---|---|
-| 5 reviewer sessions (sequential) | ~30–45 min |
+| 9 reviewer sessions (sequential) | ~60–90 min |
 | Synthesis session | ~10 min |
 | Scorecard (manual) | ~20 min |
-| Total | ~60–75 min |
+| Total | ~90–120 min |
 
 This investment is front-loaded by design. Resolving ambiguity now 
 saves multiples of this time during implementation.
