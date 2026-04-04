@@ -58,6 +58,13 @@ If you cannot find a clear statement of core value, flag that as an
 - Is the post-MVP roadmap section capturing the right things?
 - Are there items currently in the MVP that belong there instead?
 
+**Counter-proposals required**
+- For every item you recommend deferring, you MUST state:
+  1. What should be in v0.1 instead (even if it's just "hardcode this value")
+  2. Why the deferral doesn't break the core user journey
+- A scope finding without a counter-proposal is incomplete — the author
+  needs a direction, not just a flag.
+
 **Conflict awareness**
 - You will likely disagree with the OSS Adoptability reviewer on some 
   items — they want things well-documented and polished, you want things 

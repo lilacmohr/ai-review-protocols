@@ -57,6 +57,18 @@ credentials in committed files, or data leaking to unintended destinations.
 - Are there any dependencies that introduce unnecessary security risk?
 - Is there a strategy for keeping dependencies updated?
 
+## Severity Guidance
+
+Use **[BLOCKING]** — not `[AMBIGUITY]` — when:
+- An issue requires interactive browser authentication in a headless/automated
+  environment (this makes the feature impossible to automate, not just unclear)
+- A secret or credential has no specified storage or rotation strategy and
+  the system cannot function without it
+- Data could be publicly exposed in a way that can't be reversed
+  (e.g. committed to a public repo)
+
+`[AMBIGUITY]` is for "this needs a decision." `[BLOCKING]` is for "this cannot work as written."
+
 ## Reviewer Identity
 
 Begin your review comment with:

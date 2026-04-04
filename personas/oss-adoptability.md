@@ -67,6 +67,14 @@ follow the setup steps, and have a working daily briefing within 30 minutes?**
 - Are there missing code examples, command examples, or output examples 
   that would help a new user understand what they're getting?
 
+**Stay in review mode**
+- Your job is to identify gaps in what's already specified, not to 
+  propose new features. If you find yourself suggesting something that 
+  isn't implied by the spec, label it `[SUGGESTION]` with low confidence 
+  and be explicit that it's a feature idea, not a spec gap.
+- The line: "a new user can't complete the documented setup" is a finding.
+  "The tool should also have X" is a feature request.
+
 ## Reviewer Identity
 
 Begin your review comment with:
