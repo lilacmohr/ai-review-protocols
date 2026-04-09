@@ -23,8 +23,9 @@ starts is the highest-leverage use of this review protocol.
 
 ## Personas to Run
 
-Run all nine personas in independent sessions (no persona should read 
-another's comments before posting):
+Run all nine independent personas in isolated sessions (no persona should read 
+another's comments before posting). Then run the Ambiguity Auditor, which 
+requires reading the other reviews. Finally run Synthesis.
 
 | # | Persona | File | Recommended Model | Effort | Primary Value |
 |---|---|---|---|---|---|
@@ -38,11 +39,12 @@ another's comments before posting):
 | 8 | Operator | `personas/operator.md` | Sonnet | medium | Day-two ops, failure visibility, recovery |
 | 9 | Test Strategy | `personas/test-strategy.md` | Sonnet | medium | Testability, verification coverage |
 
-After all nine have posted:
+After all nine have posted, run the Auditor (reads prior comments) then Synthesis:
 
-| # | Persona | File | Recommended Model | Effort |
-|---|---|---|---|---|
-| 6 | Synthesis | `protocol/synthesis-agent.md` | Opus | high |
+| # | Persona | File | Recommended Model | Effort | Primary Value |
+|---|---|---|---|---|---|
+| 10 | Ambiguity Auditor | `personas/ambiguity-auditor.md` | Opus | high | Exhaustive implementation fork enumeration |
+| — | Synthesis | `protocol/spec-reviews-synthesis-agent.md` | Opus | high | Consolidated action list + Decision Register |
 
 ## How to Build Each Reviewer Prompt
 
@@ -70,23 +72,30 @@ At **Level 2** (slash command), run:
 ```
 Then after all nine have posted:
 ```
+/review-pr $PR_NUMBER ambiguity-auditor
+```
+Then:
+```
 /review-pr $PR_NUMBER synthesis
 ```
 
 ## Isolation Protocol
 
-Each reviewer session must be **independent**:
+The nine independent reviewer sessions must be **isolated**:
 - Do not run reviewers in the same Claude Code session
 - Start a fresh session for each persona
-- Do not share or reference prior reviewer output until the Synthesis step
+- Do not share or reference prior reviewer output until the Ambiguity Auditor step
 - Use `gh pr diff $PR_NUMBER` (not `gh pr view`) to avoid loading prior comments
+
+The Ambiguity Auditor is the **exception**: it must read all prior reviewer
+comments. Run it in its own session after all nine independents have posted.
 
 This isolation ensures your scorecard data is clean and persona 
 differentiation is measurable.
 
 ## After Reviews Are Posted
 
-1. Fill in the evaluation scorecard: `evaluation/scorecard-9-reviewer.md`
+1. Fill in the evaluation scorecard: `evaluation/scorecard-10-reviewer.md`
 2. Read the Synthesis Agent's prioritized action list
 3. Resolve any `[HUMAN DECISION]` items yourself
 4. Update the spec to resolve all blocking issues (manually or with a new agent session)
@@ -96,10 +105,11 @@ differentiation is measurable.
 
 | Step | Time |
 |---|---|
-| 9 reviewer sessions (sequential) | ~60–90 min |
+| 9 independent reviewer sessions (sequential) | ~60–90 min |
+| Ambiguity Auditor session | ~15 min |
 | Synthesis session | ~10 min |
 | Scorecard (manual) | ~20 min |
-| Total | ~90–120 min |
+| Total | ~105–135 min |
 
 This investment is front-loaded by design. Resolving ambiguity now 
 saves multiples of this time during implementation.

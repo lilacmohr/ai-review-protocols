@@ -1,12 +1,15 @@
 # Synthesis Agent
 
 <!-- 
-USAGE: Run this AFTER all reviewer personas have posted their independent 
-comments on the PR. Replace $PR_NUMBER with your actual PR number.
+USAGE: Run this AFTER all reviewer personas AND the Ambiguity Auditor have 
+posted their comments on the PR. The Ambiguity Auditor must run before this 
+agent so its Decision Register section can incorporate the structured fork list.
+Replace $PR_NUMBER with your actual PR number.
 Works for any number of reviewers — 3, 5, 9, or more.
 
 This agent reads all existing review comments and produces a single 
-prioritized action list for the PR author.
+prioritized action list for the PR author, including a Decision Register
+of every unresolved implementation fork.
 
 Recommended model: Opus
 Recommended effort: high
@@ -84,7 +87,18 @@ Make sure every `[AMBIGUITY]` and `[FALSE PRECISION]` tag from any
 reviewer appears in the action list, even if only one reviewer flagged it. 
 Ambiguity at spec time becomes a bug at implementation time.
 
-**5. Produce the prioritized action list**
+**5. Build the Decision Register**
+The Ambiguity Auditor has already produced a structured fork list. Your job 
+is to aggregate it into a Decision Register section in your output:
+- Copy every fork entry from the Auditor's comment into the Decision Register
+- For each fork also flagged by another reviewer, add a note: "also flagged by [Reviewer]"
+- Do not resolve forks. Do not recommend interpretations. The register is
+  a checklist — every item must be checked off by a human before coding begins
+- If the Ambiguity Auditor did not run, build the Decision Register yourself
+  from all `[AMBIGUITY]` and `[FALSE PRECISION]` findings, reformatting each
+  one as an A/B fork where possible
+
+**6. Produce the prioritized action list**
 Order all action items by priority:
 1. Consensus BLOCKING/AMBIGUITY items (multiple reviewers)
 2. Single-reviewer BLOCKING items (high confidence)
@@ -121,6 +135,23 @@ judgment — no agent recommendation was clear enough to act on without you.
 
 ### ⚪ Optional: Nits
 {Consolidated minor polish items}
+
+---
+
+### 📋 Decision Register
+> **Resolve every item in this register before any code is written.**
+> Each entry is an unresolved implementation fork — two engineers given
+> this spec would write different code. Check off each item by documenting
+> the chosen interpretation in the spec.
+
+{Fork entries from the Ambiguity Auditor, or reformatted [AMBIGUITY]/[FALSE PRECISION]
+findings if the Auditor did not run. One entry per fork in the format:
+
+**[Short name]** — `[section reference]`
+*A:* [interpretation A] | *B:* [interpretation B]
+*Surfaces in:* [module or function] | *Cross-reviewer note:* [if flagged by others]
+
+☐ Unresolved}
 
 ---
 

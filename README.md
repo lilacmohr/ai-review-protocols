@@ -29,8 +29,8 @@ value, and what to improve.
 ai-review-protocols/
 ├── README.md                        ← you are here
 ├── protocol/
-│   ├── base-instructions.md         ← shared instructions for all reviewers
-│   └── synthesis-agent.md           ← synthesizes all reviews into action list
+│   ├── base-instructions.md                  ← shared instructions for all reviewers
+│   └── spec-reviews-synthesis-agent.md       ← synthesizes all reviews + Decision Register
 ├── personas/
 │   ├── architect.md                 ← module boundaries, interfaces, data flow
 │   ├── skeptic.md                   ← assumptions, gaps, optimistic scenarios
@@ -40,16 +40,13 @@ ai-review-protocols/
 │   ├── domain-expert.md             ← library/API gotchas, real-world data quality
 │   ├── legal-compliance.md          ← content rights, ToS, data retention
 │   ├── operator.md                  ← day-two ops, failure visibility, recovery
-│   └── test-strategy.md             ← testability, verification coverage
-│   ├── domain-expert.md             ← library/API gotchas, real-world data quality
-│   ├── legal-compliance.md          ← content rights, ToS, data retention
-│   ├── operator.md                  ← day-two ops, failure visibility, recovery
-│   └── test-strategy.md             ← testability, verification coverage
+│   ├── test-strategy.md             ← testability, verification coverage
+│   └── ambiguity-auditor.md         ← implementation forks, runs after the 9 independents
 ├── workflows/
 │   ├── spec-review.md               ← which personas + order for spec PRs
 │   └── implementation-review.md     ← for code PRs (coming soon)
 ├── evaluation/
-    └── scorecard-9-reviewer.md       ← measure and improve the protocol
+    └── scorecard-10-reviewer.md       ← measure and improve the protocol
 └── .claude/
     └── commands/
         └── review-pr.md             ← Level 2 slash command (stub)
@@ -95,21 +92,31 @@ review comment to your PR.
 - `personas/operator.md` — Sonnet, medium effort
 - `personas/test-strategy.md` — Sonnet, medium effort
 
-**Step 7:** After all nine have posted, run the Synthesis Agent:
+**Step 7:** After all nine independent reviewers have posted, run the 
+Ambiguity Auditor (it reads the other reviews to find implementation forks):
 ```
-protocol/synthesis-agent.md
+personas/ambiguity-auditor.md
 ```
-Use Opus, high effort. It will read all nine reviews and post a 
-prioritized action list.
+Use Opus, high effort.
 
-**Step 8:** Work from the Synthesis Agent's output. Resolve 
-`[HUMAN DECISION]` items yourself. Update the spec. Merge.
+**Step 8:** After the Ambiguity Auditor has posted, run the Synthesis Agent:
+```
+protocol/spec-reviews-synthesis-agent.md
+```
+Use Opus, high effort. It will read all ten reviews and post a 
+prioritized action list with a Decision Register.
+
+**Step 9:** Work from the Synthesis Agent's output. Resolve 
+`[HUMAN DECISION]` items yourself. Check off every item in the 
+Decision Register. Update the spec. Merge.
 
 ### Isolation is important
 
-Each reviewer session must be independent — start a fresh Claude Code 
-session for each persona and use `gh pr diff $PR_NUMBER` to avoid 
-loading prior reviewer comments. See `workflows/spec-review.md` for details.
+Each of the nine independent reviewer sessions must be isolated — start a fresh
+Claude Code session for each persona and use `gh pr diff $PR_NUMBER` to avoid
+loading prior reviewer comments. The Ambiguity Auditor is the exception: run
+it in its own session after all nine have posted, as it must read their output.
+See `workflows/spec-review.md` for details.
 
 ---
 
@@ -132,7 +139,7 @@ Ambiguity at spec time becomes a bug at implementation time.
 
 ## Evaluating the Protocol
 
-After running a review, fill in `evaluation/scorecard-9-reviewer.md`. It tracks:
+After running a review, fill in `evaluation/scorecard-10-reviewer.md`. It tracks:
 
 - Per-comment signal quality (label distribution, confidence, actionability)
 - Persona differentiation (did each reviewer find unique issues?)
@@ -158,6 +165,7 @@ Don't skip it for the first few runs.
 | Legal & Compliance | Sonnet | medium | Pattern recognition against known compliance concerns |
 | Operator | Sonnet | medium | Checklist-style operability review |
 | Test Strategy | Sonnet | medium | Checklist-style testability review |
+| Ambiguity Auditor | Opus | high | Exhaustive fork enumeration across all reviewer findings |
 | Synthesis | Opus | high | Reasoning across conflicting inputs |
 
 Budget-conscious option: run all personas on Sonnet first. Upgrade 
