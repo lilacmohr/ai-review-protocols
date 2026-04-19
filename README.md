@@ -11,8 +11,12 @@ Built and validated on the [ai-radar](https://github.com/your-org/ai-radar) proj
 ## The Core Idea
 
 Most AI code review tools send a single agent to read a PR. This framework 
-sends **nine independent specialized reviewers**, each looking through a 
+sends **multiple independent specialized reviewers**, each looking through a 
 different lens, then synthesizes their feedback into a prioritized action list.
+
+For code specs, the protocol runs nine independent reviewers. For framework 
+or content specs, it runs five. Both workflows share the same comment format, 
+isolation protocol, and Synthesis Agent.
 
 The result: higher signal, fewer blind spots, and explicit surfacing of 
 tradeoffs that a single reviewer would silently resolve.
@@ -29,21 +33,30 @@ value, and what to improve.
 ai-review-protocols/
 ├── README.md                        ← you are here
 ├── protocol/
-│   ├── base-instructions.md                  ← shared instructions for all reviewers
-│   └── spec-reviews-synthesis-agent.md       ← synthesizes all reviews + Decision Register
+│   ├── spec-reviewer-base-instructions.md           ← base for code-spec reviewers
+│   ├── framework-spec-reviewer-base-instructions.md ← base for framework-spec reviewers
+│   └── spec-reviews-synthesis-agent.md              ← synthesizes all reviews + Decision Register
 ├── personas/
-│   ├── architect.md                 ← module boundaries, interfaces, data flow
-│   ├── skeptic.md                   ← assumptions, gaps, optimistic scenarios
-│   ├── security.md                  ← secrets, OAuth, data handling
-│   ├── oss-adoptability.md          ← setup realism, config clarity, docs
-│   ├── scope.md                     ← MVP discipline, scope creep
-│   ├── domain-expert.md             ← library/API gotchas, real-world data quality
-│   ├── legal-compliance.md          ← content rights, ToS, data retention
-│   ├── operator.md                  ← day-two ops, failure visibility, recovery
-│   ├── test-strategy.md             ← testability, verification coverage
-│   └── ambiguity-auditor.md         ← implementation forks, runs after the 9 independents
+│   ├── code-spec/               ← reviewers for software/code specs (via GitHub PR)
+│   │   ├── architect.md                 ← module boundaries, interfaces, data flow
+│   │   ├── skeptic.md                   ← assumptions, gaps, optimistic scenarios
+│   │   ├── security.md                  ← secrets, OAuth, data handling
+│   │   ├── oss-adoptability.md          ← setup realism, config clarity, docs
+│   │   ├── scope.md                     ← MVP discipline, scope creep
+│   │   ├── domain-expert.md             ← library/API gotchas, real-world data quality
+│   │   ├── legal-compliance.md          ← content rights, ToS, data retention
+│   │   ├── operator.md                  ← day-two ops, failure visibility, recovery
+│   │   ├── test-strategy.md             ← testability, verification coverage
+│   │   └── ambiguity-auditor.md         ← implementation forks, runs after the 9 independents
+│   └── framework-spec/          ← reviewers for framework/content specs (file-based)
+│       ├── target-audience-skeptic.md   ← resonance, specificity, trust
+│       ├── practitioner-executor.md     ← actionability, implementation gaps
+│       ├── consistency-auditor.md       ← terminology drift, cross-section contradictions
+│       ├── build-agent.md               ← execution gaps, forced assumption audit
+│       └── stakeholder-alignment.md     ← goal balance, audience allocation
 ├── workflows/
-│   ├── spec-review.md               ← which personas + order for spec PRs
+│   ├── spec-review.md               ← code-spec review: 9 personas + ambiguity auditor
+│   ├── framework-spec-review.md     ← framework-spec review: 5 personas
 │   └── implementation-review.md     ← for code PRs (coming soon)
 ├── evaluation/
     └── scorecard-10-reviewer.md       ← measure and improve the protocol
@@ -67,7 +80,7 @@ ai-review-protocols/
 
 **Step 2:** Build the prompt by combining two files:
 ```
-protocol/base-instructions.md  +  personas/architect.md
+protocol/spec-reviewer-base-instructions.md  +  personas/code-spec/architect.md
 ```
 Copy both, paste base first then persona, into your Claude Code session.
 
@@ -83,19 +96,19 @@ Copy both, paste base first then persona, into your Claude Code session.
 review comment to your PR.
 
 **Step 6:** Repeat for each persona (fresh session each time):
-- `personas/skeptic.md` — Opus, high effort
-- `personas/security.md` — Sonnet, medium effort  
-- `personas/oss-adoptability.md` — Sonnet, medium effort
-- `personas/scope.md` — Sonnet, medium effort
-- `personas/domain-expert.md` — Opus, high effort
-- `personas/legal-compliance.md` — Sonnet, medium effort
-- `personas/operator.md` — Sonnet, medium effort
-- `personas/test-strategy.md` — Sonnet, medium effort
+- `personas/code-spec/skeptic.md` — Opus, high effort
+- `personas/code-spec/security.md` — Sonnet, medium effort  
+- `personas/code-spec/oss-adoptability.md` — Sonnet, medium effort
+- `personas/code-spec/scope.md` — Sonnet, medium effort
+- `personas/code-spec/domain-expert.md` — Opus, high effort
+- `personas/code-spec/legal-compliance.md` — Sonnet, medium effort
+- `personas/code-spec/operator.md` — Sonnet, medium effort
+- `personas/code-spec/test-strategy.md` — Sonnet, medium effort
 
 **Step 7:** After all nine independent reviewers have posted, run the 
 Ambiguity Auditor (it reads the other reviews to find implementation forks):
 ```
-personas/ambiguity-auditor.md
+personas/code-spec/ambiguity-auditor.md
 ```
 Use Opus, high effort.
 

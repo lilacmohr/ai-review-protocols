@@ -1,18 +1,22 @@
 # Workflow: Spec / Architecture Review
 
 <!-- 
-Use this workflow when reviewing a PR that adds or modifies a spec, 
-architecture document, or technical design document.
+Use this workflow when reviewing a PR that adds or modifies a software or 
+code-system spec, architecture document, or technical design document.
 
 For implementation (code) PRs, use workflows/implementation-review.md instead.
+For framework, playbook, or content specs, use workflows/framework-spec-review.md instead.
 -->
 
 ## When to Use This Workflow
 
-- Adding or updating SPEC.md, ARCHITECTURE.md, or similar
+- Adding or updating SPEC.md, ARCHITECTURE.md, or similar for a **software system**
 - Reviewing a technical design before implementation begins
 - Reviewing an ADR (Architecture Decision Record)
-- Any PR where the primary artifact is a decision or design, not code
+- Any PR where the primary artifact is a software or code-system design document
+
+> **Not sure which workflow to use?** If the spec describes a framework, playbook,
+> curriculum, or other non-code artifact — use `workflows/framework-spec-review.md` instead.
 
 ## Why Spec Review Matters
 
@@ -29,21 +33,21 @@ requires reading the other reviews. Finally run Synthesis.
 
 | # | Persona | File | Recommended Model | Effort | Primary Value |
 |---|---|---|---|---|---|
-| 1 | Architect | `personas/architect.md` | Opus | high | Module boundaries, interfaces, data flow |
-| 2 | Skeptic | `personas/skeptic.md` | Opus | high | Unstated assumptions, optimistic scenarios |
-| 3 | Security | `personas/security.md` | Sonnet | medium | Secrets, OAuth scope, data handling |
-| 4 | OSS Adoptability | `personas/oss-adoptability.md` | Sonnet | medium | Setup realism, config clarity, docs gaps |
-| 5 | MVP Scope | `personas/scope.md` | Sonnet | medium | Scope creep, over-engineering, MVP integrity |
-| 6 | Domain Expert | `personas/domain-expert.md` | Opus | high | Library/API gotchas, real-world data quality |
-| 7 | Legal & Compliance | `personas/legal-compliance.md` | Sonnet | medium | Content rights, ToS, data retention |
-| 8 | Operator | `personas/operator.md` | Sonnet | medium | Day-two ops, failure visibility, recovery |
-| 9 | Test Strategy | `personas/test-strategy.md` | Sonnet | medium | Testability, verification coverage |
+| 1 | Architect | `personas/code-spec/architect.md` | Opus | high | Module boundaries, interfaces, data flow |
+| 2 | Skeptic | `personas/code-spec/skeptic.md` | Opus | high | Unstated assumptions, optimistic scenarios |
+| 3 | Security | `personas/code-spec/security.md` | Sonnet | medium | Secrets, OAuth scope, data handling |
+| 4 | OSS Adoptability | `personas/code-spec/oss-adoptability.md` | Sonnet | medium | Setup realism, config clarity, docs gaps |
+| 5 | MVP Scope | `personas/code-spec/scope.md` | Sonnet | medium | Scope creep, over-engineering, MVP integrity |
+| 6 | Domain Expert | `personas/code-spec/domain-expert.md` | Opus | high | Library/API gotchas, real-world data quality |
+| 7 | Legal & Compliance | `personas/code-spec/legal-compliance.md` | Sonnet | medium | Content rights, ToS, data retention |
+| 8 | Operator | `personas/code-spec/operator.md` | Sonnet | medium | Day-two ops, failure visibility, recovery |
+| 9 | Test Strategy | `personas/code-spec/test-strategy.md` | Sonnet | medium | Testability, verification coverage |
 
 After all nine have posted, run the Auditor (reads prior comments) then Synthesis:
 
 | # | Persona | File | Recommended Model | Effort | Primary Value |
 |---|---|---|---|---|---|
-| 10 | Ambiguity Auditor | `personas/ambiguity-auditor.md` | Opus | high | Exhaustive implementation fork enumeration |
+| 10 | Ambiguity Auditor | `personas/code-spec/ambiguity-auditor.md` | Opus | high | Exhaustive implementation fork enumeration |
 | — | Synthesis | `protocol/spec-reviews-synthesis-agent.md` | Opus | high | Consolidated action list + Decision Register |
 
 ## How to Build Each Reviewer Prompt
@@ -51,7 +55,7 @@ After all nine have posted, run the Auditor (reads prior comments) then Synthesi
 At **Level 1** (manual), combine files by hand:
 
 1. Open `protocol/base-instructions.md` — copy the full contents
-2. Open your chosen persona file — copy the full contents
+2. Open your chosen persona file from `personas/code-spec/` — copy the full contents
 3. Paste both together (base first, then persona) into a new Claude Code session
 4. Replace `$PR_NUMBER` with your actual PR number
 5. Set your model: `/model opus` or `/model sonnet` per the table above
