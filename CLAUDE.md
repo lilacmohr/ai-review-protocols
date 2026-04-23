@@ -1,17 +1,25 @@
-# ai-review-protocols
+# AI Engineering Playbook
 
-This repo contains a structured multi-agent PR review framework.
+This repo contains the AI Engineering Playbook — a structured framework for
+building software with AI agents.
 
 ## Key files
-- `protocol/base-instructions.md` — start here for any review session
-- `personas/` — pick one persona per session
-- `workflows/spec-review.md` — full workflow instructions
-- `evaluation/scorecard.md` — fill in after each review run
 
-## How to run a review
-Combine base-instructions.md + a persona file, replace $PR_NUMBER, 
-set model and effort, paste into a fresh Claude Code session.
+- `01-spec-review/README.md` — multi-agent spec review protocol
+- `02-setup/README.md` — project setup: briefing doc, hooks, templates, governance
+- `03-delivery-cycle/README.md` — red-green-retro delivery loop
+- `02-setup/protocol/playbook-pre-implementation.md` — full setup protocol
+- `02-setup/examples/ai-radar/CLAUDE.md` — reference implementation briefing doc
+
+## Structure
+
+```
+01-spec-review/    ← spec review protocol and personas
+02-setup/          ← setup artifacts: CLAUDE.md framework, hooks, issue templates
+03-delivery-cycle/ ← delivery loop: red/green/retro, skills for PR review
+```
 
 ## You are NOT an implementer in this repo
-Do not write application code here. This repo contains prompts and 
-documentation only.
+
+Do not write application code here. This repo contains prompts, protocols,
+templates, and documentation only.

@@ -1,0 +1,94 @@
+name: "[REFACTOR] Refactor"
+description: "Improve structure, testability, or consistency of existing code without changing behavior. Tests must stay green before and after."
+title: "[REFACTOR] "
+labels: ["refactor"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Refactor Protocol
+        A refactor **does not change observable behavior**. All existing tests must
+        pass before and after. If behavior needs to change, open a `[IMPL]` or `[TEST]`
+        issue instead.
+
+        > **Playbook note:** Refactors are safe to defer but not safe to skip forever.
+        > Capture them here so they're visible, prioritizable, and don't get lost as
+        > a comment in the code.
+
+  - type: input
+    id: module
+    attributes:
+      label: Module to Refactor
+      description: "File path(s) affected."
+      placeholder: "src/sources/gmail.py, tests/unit/test_gmail.py"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What to Change
+      description: "Concrete description of the structural change. Be specific enough that an agent can implement it without follow-up questions."
+      placeholder: |
+        Extract the external API call chains into named private helpers:
+        - _list_message_ids(service, label, query) → list[str]
+        - _get_message(service, msg_id) → dict[str, object]
+
+        Update calling functions to use these helpers.
+        Update tests to mock the helper functions instead of the full SDK chain.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why / Rule Violated
+      description: "Which standard or rule does the current code violate? Link to CLAUDE.md section, playbook-notes entry, or decision issue."
+      placeholder: |
+        Violates CLAUDE.md — Mocking Strategy: external SDK calls deeper than 3 levels
+        must be extracted into a named private helper. Current mock chain is 5 levels deep
+        (service.users().messages().list().execute.return_value), making tests
+        fragile and hard to read.
+    validations:
+      required: true
+
+  - type: textarea
+    id: not_changing
+    attributes:
+      label: What Must Not Change
+      description: "Observable behavior that must be identical before and after. Be explicit."
+      placeholder: |
+        - All existing tests must pass before and after
+        - Public interface: method signatures and return types unchanged
+        - Failure handling behavior unchanged (same log events, same return values)
+        - No new dependencies
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: Done When
+      description: "Acceptance criteria."
+      value: |
+        - [ ] `make check` passes before the change (confirm green baseline)
+        - [ ] Structural change implemented
+        - [ ] `make check` passes after the change (tests still green)
+        - [ ] Mock depth reduced to ≤ 3 levels (if mock depth was the issue)
+        - [ ] No behavior changes — only structure
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Agent instructions:**
+        1. Run `make check` first — confirm the baseline is green before touching anything.
+        2. Make the structural change. Do not change test assertions or failure handling behavior.
+        3. Run `make check` again — must be clean.
+        4. If any test needs updating, it must be a mechanical change only (import paths,
+           mock target strings). If an assertion would change, stop and raise a DECISION NEEDED.
+        5. Commit with message: `refactor([module]): [description] [closes #N]`

@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: "📖 SPEC.md — Architecture & Requirements"
+    url: ../blob/main/SPEC.md
+    about: "Read the spec before opening any issue. All behavior is defined here."
+  - name: "🤖 CLAUDE.md — Agent Standards & Conventions"
+    url: ../blob/main/CLAUDE.md
+    about: "Read before writing any code. Defines quality gates, error handling, logging, and TDD workflow."

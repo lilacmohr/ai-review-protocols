@@ -11,7 +11,7 @@ body:
         ## TDD Protocol
         This issue produces a **failing test file**. No implementation code.
         Tests must be red before the paired `[IMPL]` issue is created.
-        
+
         > **Playbook note:** The test file is the acceptance criteria. It is the
         > executable specification of "done." If a behavior isn't tested, it isn't
         > required. Write tests with that weight in mind.
@@ -21,7 +21,7 @@ body:
     attributes:
       label: Module
       description: "The module under test. Match the file path exactly."
-      placeholder: "radar/processing/pre_filter.py"
+      placeholder: "src/processing/pre_filter.py"
     validations:
       required: true
 
@@ -46,13 +46,13 @@ body:
   - type: textarea
     id: pipeline_context
     attributes:
-      label: Pipeline Context
-      description: "What stage is this? What does it receive and produce? Copy from SPEC.md §4.2 if applicable."
+      label: Module Context
+      description: "What does this module do? What does it receive and produce? Copy from SPEC.md if applicable."
       placeholder: |
         Stage: Pre-Filter (step 4 of preprocessing)
-        Receives: list[ExcerptItem] (after Phase 1 dedup)
+        Receives: list[ExcerptItem] (after dedup)
         Produces: list[ExcerptItem] (filtered subset)
-        Position: between Deduplicator (Phase 2) and Summarizer (Pass 1)
+        Position: between Deduplicator and Summarizer
     validations:
       required: true
 
@@ -62,9 +62,9 @@ body:
       label: Happy Path Tests
       description: "List each happy path case. One line per test. Be specific about inputs and expected outputs."
       placeholder: |
-        - Articles where ANY keyword matches title → pass through
-        - Articles where ANY keyword matches excerpt → pass through
-        - Matching is case-insensitive (keyword "AI" matches "ai", "AI", "Ai")
+        - Items where ANY keyword matches title → pass through
+        - Items where ANY keyword matches excerpt → pass through
+        - Matching is case-insensitive
         - Returns subset of original list, preserving order
         - Returns all items if all match
     validations:
@@ -74,12 +74,12 @@ body:
     id: failure_modes
     attributes:
       label: Failure Mode Tests
-      description: "One test per failure mode from SPEC.md §3.7 that applies to this module. If none apply directly, write N/A and explain."
+      description: "One test per failure mode from SPEC.md that applies to this module. If none apply directly, write N/A and explain."
       placeholder: |
         - Empty input list → returns [] (never raises)
-        - No articles match any keyword → returns []
-        - All articles match → returns full list unchanged
-        - Single-character keyword (e.g. "a") → matches only if substring of title/excerpt
+        - No items match any keyword → returns []
+        - All items match → returns full list unchanged
+        - Single-item list → handled correctly (no off-by-one)
     validations:
       required: true
 
@@ -87,7 +87,7 @@ body:
     id: contract_tests
     attributes:
       label: Interface / Contract Tests
-      description: "If this module implements a public interface (Source ABC, LLMClient), list the contract tests. Otherwise write N/A."
+      description: "If this module implements a public interface (e.g. a base class or ABC), list the contract tests. Otherwise write N/A."
       placeholder: |
         N/A — PreFilter is an internal processing stage, not a public interface.
     validations:
@@ -101,9 +101,13 @@ body:
       placeholder: |
         New fixtures needed:
         - tests/fixtures/excerpt_items_mixed.py — factory for list[ExcerptItem] with varied content
-        
+
         Existing fixtures usable:
         - conftest.py: sample_config (already exists)
+
+        Model validation constraints to note (prevents silent test setup failures):
+        - ProfileConfig requires interests: list[str] with ≥ 1 item
+        - [list any other required fields / validators for dataclasses used in test helpers]
     validations:
       required: true
 
@@ -114,7 +118,14 @@ body:
       description: "What external dependencies need to be mocked? How?"
       placeholder: |
         None — PreFilter is pure logic (no I/O, no network, no LLM).
-        Use real ExcerptItem dataclass instances as input.
+        Use real dataclass instances as input.
+
+        ⚠️ Mock depth check: if mocking requires configuring a chain of more than
+        3 method calls (e.g. service.a().b().c().execute()), the module under test
+        likely needs an internal helper that can be mocked at a higher level.
+        Before writing tests, check whether such a helper exists. If not, note it
+        here — the [IMPL] issue should add the helper before (or alongside) the
+        main implementation. Tests should mock the helper, not the SDK chain.
     validations:
       required: true
 
@@ -125,12 +136,16 @@ body:
       description: "Acceptance criteria for THIS issue (not the implementation). The test file is done when:"
       value: |
         - [ ] Test file exists at the path specified above
-        - [ ] All tests in the file FAIL (red) — no implementation exists yet
+        - [ ] All tests FAIL (red) — confirmed with `pytest <test_file> -v`
+        - [ ] Tests collect as **FAIL**, not **ERROR** (create a minimal stub module if needed — see agent instructions below)
         - [ ] Every happy path case has at least one test
         - [ ] Every failure mode has at least one test
         - [ ] Empty input case is covered
         - [ ] `make lint` passes on the test file itself (no syntax errors, typed fixtures)
         - [ ] Test names are descriptive: `test_pre_filter_passes_on_keyword_in_excerpt`
+        - [ ] Any spec ambiguities encountered while writing tests are documented as `[DECISION]` issues — not silently resolved in test code
+        - [ ] PR description includes an "Interface decisions made" section listing any interpretive calls, even obvious ones
+        - [ ] **If this module parses structured LLM output** (headings, JSON fields, delimiters): at least one regression test per marker that imports the parser constant and asserts its verbatim presence in the prompt template — canned responses in tests bypass the template entirely, so template/parser mismatches are otherwise invisible
         - [ ] Paired `[IMPL]` issue is linked below before closing this issue
     validations:
       required: true
@@ -148,9 +163,13 @@ body:
     attributes:
       value: |
         ---
-        **Agent instructions:** 
+        **Agent instructions:**
         1. Read `CLAUDE.md` and `SPEC.md` at the sections referenced above before writing any code.
-        2. Write the test file only. Do not create or modify any file in `radar/`.
-        3. Run `make test-unit` — confirm all new tests fail for the right reason: the implementation does not exist yet (expected failures: `ModuleNotFoundError`, `AttributeError`, `TypeError`, or `ImportError` — not assertion errors, which would mean implementation already exists).
-        4. Run `make lint` — confirm the test file is clean.
-        5. Create the paired `[IMPL]` issue and add its number in the field above before closing this issue.
+        2. Write the test file only. Do not create or modify any file in the source module directory.
+        3. Create a **minimal stub** for the module under test (empty classes/functions with correct signatures but no logic). This allows pytest to collect tests as **FAIL** rather than **ERROR**. Stubs are infrastructure, not implementation — they must not contain any real logic.
+        4. Write the first 3–5 tests, then run `make lint` immediately — fix any violations before continuing. Catching lint errors early is much cheaper than fixing them after the full file is written. Common traps in test files: magic values in assertions (extract to named variables); lines over the length limit; unused parameters in stub classes (add `# noqa: ARG002`); inline strings in `raise` statements (assign to `msg` first); use timezone-aware datetime where required.
+        5. Finish writing all remaining tests.
+        6. Run `pytest <test_file> -v` — confirm all behavioral tests show **FAILED**, not **ERROR**. A test that shows ERROR means pytest couldn't collect it; fix the stub until it shows FAILED.
+        7. If any assertion requires an interpretive call not explicitly in the spec (semantics, required vs optional, error types), open a `[DECISION]` issue **before** encoding the choice in test code.
+        8. Run `make lint` — confirm the full test file and stub are clean.
+        9. Create the paired `[IMPL]` issue and add its number in the field above before closing this issue.

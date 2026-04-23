@@ -103,7 +103,7 @@ body:
     id: failure_handling
     attributes:
       label: Failure Handling
-      description: "How this module handles failures per SPEC.md §3.7 and CLAUDE.md §6."
+      description: "How this module handles failures per SPEC.md (failure handling section) and CLAUDE.md (failure handling conventions)."
       placeholder: |
         - Empty input → return [] immediately, no error
         - No matches → return [], no error, no log (expected case)
@@ -136,7 +136,7 @@ body:
         - [ ] `make lint` passes — ruff clean, no formatting issues
         - [ ] `make typecheck` passes — mypy strict, no errors
         - [ ] All public functions and methods have explicit return type annotations
-        - [ ] All log calls use structured key=value format (see CLAUDE.md §5.3)
+        - [ ] All log calls use structured key=value format (see CLAUDE.md — Logging conventions)
         - [ ] No bare `except` clauses
         - [ ] Module docstring explains: what stage, input type, output type, key constraint
         - [ ] No new unreviewed dependencies introduced

@@ -1,189 +1,76 @@
-# ai-review-protocols
+# AI Engineering Playbook
 
-A structured multi-agent PR review framework using Claude Code. Designed 
-to surface ambiguity, unstated assumptions, and non-obvious issues in 
-specs and code before implementation begins.
+A structured framework for building software with AI agents. Three chapters, each
+covering a distinct phase of the development lifecycle — from spec to setup to the
+repeating delivery loop.
 
-Built and validated on the [ai-radar](https://github.com/your-org/ai-radar) project.
-
----
-
-## The Core Idea
-
-Most AI code review tools send a single agent to read a PR. This framework 
-sends **multiple independent specialized reviewers**, each looking through a 
-different lens, then synthesizes their feedback into a prioritized action list.
-
-For code specs, the protocol runs nine independent reviewers. For framework 
-or content specs, it runs five. Both workflows share the same comment format, 
-isolation protocol, and Synthesis Agent.
-
-The result: higher signal, fewer blind spots, and explicit surfacing of 
-tradeoffs that a single reviewer would silently resolve.
-
-The framework is also **evaluable** — a structured scorecard lets you 
-measure whether the protocol is actually working, which personas add unique 
-value, and what to improve.
+Built and validated on [ai-radar](https://github.com/lilacmohr/ai-radar), a personal
+AI news briefing pipeline developed entirely with this workflow.
 
 ---
 
-## Repo Structure
+## The Three Chapters
 
-```
-ai-review-protocols/
-├── README.md                        ← you are here
-├── protocol/
-│   ├── spec-reviewer-base-instructions.md           ← base for code-spec reviewers
-│   ├── framework-spec-reviewer-base-instructions.md ← base for framework-spec reviewers
-│   └── spec-reviews-synthesis-agent.md              ← synthesizes all reviews + Decision Register
-├── personas/
-│   ├── code-spec/               ← reviewers for software/code specs (via GitHub PR)
-│   │   ├── architect.md                 ← module boundaries, interfaces, data flow
-│   │   ├── skeptic.md                   ← assumptions, gaps, optimistic scenarios
-│   │   ├── security.md                  ← secrets, OAuth, data handling
-│   │   ├── oss-adoptability.md          ← setup realism, config clarity, docs
-│   │   ├── scope.md                     ← MVP discipline, scope creep
-│   │   ├── domain-expert.md             ← library/API gotchas, real-world data quality
-│   │   ├── legal-compliance.md          ← content rights, ToS, data retention
-│   │   ├── operator.md                  ← day-two ops, failure visibility, recovery
-│   │   ├── test-strategy.md             ← testability, verification coverage
-│   │   └── ambiguity-auditor.md         ← implementation forks, runs after the 9 independents
-│   └── framework-spec/          ← reviewers for framework/content specs (file-based)
-│       ├── target-audience-skeptic.md   ← resonance, specificity, trust
-│       ├── practitioner-executor.md     ← actionability, implementation gaps
-│       ├── consistency-auditor.md       ← terminology drift, cross-section contradictions
-│       ├── build-agent.md               ← execution gaps, forced assumption audit
-│       └── stakeholder-alignment.md     ← goal balance, audience allocation
-├── workflows/
-│   ├── spec-review.md               ← code-spec review: 9 personas + ambiguity auditor
-│   ├── framework-spec-review.md     ← framework-spec review: 5 personas
-│   └── implementation-review.md     ← for code PRs (coming soon)
-├── evaluation/
-    └── scorecard-10-reviewer.md       ← measure and improve the protocol
-└── .claude/
-    └── commands/
-        └── review-pr.md             ← Level 2 slash command (stub)
-```
+### [01 — Spec Review](01-spec-review/)
+
+Review a spec before implementation begins. Send multiple independent specialized
+reviewers, each through a different lens, then synthesize into a prioritized action
+list with a Decision Register.
+
+Most AI code failures trace to a spec that was ambiguous or incomplete. This is the
+cheapest place to find and fix those gaps.
+
+→ **Start here if** you have a spec (PR, doc, or design) and want to find holes before
+you write code.
 
 ---
 
-## Quickstart (Level 1 — Manual)
+### [02 — Setup](02-setup/)
 
-### Prerequisites
-- Claude Code CLI installed and authenticated
-- GitHub CLI (`gh`) installed and authenticated
-- A PR open on GitHub that you want to review
+Infrastructure that makes the delivery cycle reliable: an agent briefing document
+(CLAUDE.md), enforcement hooks, issue templates, and bot account governance.
 
-### Run a spec review
+The agent briefing document is the most underrated artifact in AI-assisted development.
+A well-written CLAUDE.md is the difference between an agent that needs constant
+supervision and one that can be trusted with a ticket.
 
-**Step 1:** Start a fresh Claude Code session for each reviewer persona.
-
-**Step 2:** Build the prompt by combining two files:
-```
-protocol/spec-reviewer-base-instructions.md  +  personas/code-spec/architect.md
-```
-Copy both, paste base first then persona, into your Claude Code session.
-
-**Step 3:** Replace `$PR_NUMBER` with your actual PR number.
-
-**Step 4:** Set the recommended model and effort:
-```
-/model opus
-/effort high
-```
-
-**Step 5:** Send. The agent will read the diff and post a structured 
-review comment to your PR.
-
-**Step 6:** Repeat for each persona (fresh session each time):
-- `personas/code-spec/skeptic.md` — Opus, high effort
-- `personas/code-spec/security.md` — Sonnet, medium effort  
-- `personas/code-spec/oss-adoptability.md` — Sonnet, medium effort
-- `personas/code-spec/scope.md` — Sonnet, medium effort
-- `personas/code-spec/domain-expert.md` — Opus, high effort
-- `personas/code-spec/legal-compliance.md` — Sonnet, medium effort
-- `personas/code-spec/operator.md` — Sonnet, medium effort
-- `personas/code-spec/test-strategy.md` — Sonnet, medium effort
-
-**Step 7:** After all nine independent reviewers have posted, run the 
-Ambiguity Auditor (it reads the other reviews to find implementation forks):
-```
-personas/code-spec/ambiguity-auditor.md
-```
-Use Opus, high effort.
-
-**Step 8:** After the Ambiguity Auditor has posted, run the Synthesis Agent:
-```
-protocol/spec-reviews-synthesis-agent.md
-```
-Use Opus, high effort. It will read all ten reviews and post a 
-prioritized action list with a Decision Register.
-
-**Step 9:** Work from the Synthesis Agent's output. Resolve 
-`[HUMAN DECISION]` items yourself. Check off every item in the 
-Decision Register. Update the spec. Merge.
-
-### Isolation is important
-
-Each of the nine independent reviewer sessions must be isolated — start a fresh
-Claude Code session for each persona and use `gh pr diff $PR_NUMBER` to avoid
-loading prior reviewer comments. The Ambiguity Auditor is the exception: run
-it in its own session after all nine have posted, as it must read their output.
-See `workflows/spec-review.md` for details.
+→ **Start here if** you're beginning a new project or onboarding a project to
+AI-assisted development for the first time.
 
 ---
 
-## Comment Labels
+### [03 — Delivery Cycle](03-delivery-cycle/)
 
-Reviewers use a structured label taxonomy:
+The red-green-retro loop: TEST ticket (write failing tests) → IMPL ticket (make them
+pass) → retro (update setup artifacts). Repeat.
 
-| Label | Meaning | Author should... |
-|---|---|---|
-| `[BLOCKING]` | Something is wrong | Fix before merge |
-| `[AMBIGUITY]` | Something is undefined | Make a decision, document it |
-| `[FALSE PRECISION]` | Looks decided but isn't | Confirm or mark TBD |
-| `[SUGGESTION]` | Worth improving | Consider and decide |
-| `[NIT]` | Minor polish | Fix if easy |
+Includes the test PR review skill (asking "what tests are missing?" before the IMPL
+ticket opens) and the implementation review skill (asking "is this the best
+implementation?" after the IMPL ticket closes).
 
-`[AMBIGUITY]` and `[FALSE PRECISION]` are treated as merge-blocking. 
-Ambiguity at spec time becomes a bug at implementation time.
+→ **Start here if** you're already set up and want to run a repeatable delivery loop
+with AI agents.
 
 ---
 
-## Evaluating the Protocol
+## Where to Start
 
-After running a review, fill in `evaluation/scorecard-10-reviewer.md`. It tracks:
+If you're new to the playbook: **start with 02-Setup**. The spec review and delivery
+cycle both depend on having a good CLAUDE.md and governance structure.
 
-- Per-comment signal quality (label distribution, confidence, actionability)
-- Persona differentiation (did each reviewer find unique issues?)
-- Conflict rate (healthy range: 10–30%)
-- Protocol Effectiveness Score (PES)
-- Retro: what to improve next run
+If you're mid-project and something feels off: **run a spec review** on your current
+design doc or a recent PR. The Ambiguity Auditor often surfaces the root cause.
 
-The scorecard is what turns this from a tool into a **learnable workflow**. 
-Don't skip it for the first few runs.
+If you're running issues and want structure: **read the delivery cycle**. The
+red-green-retro framing makes the loop explicit and gives the retro a concrete output.
 
 ---
 
-## Model Recommendations
+## Reference Implementation
 
-| Persona | Model | Effort | Rationale |
-|---|---|---|---|
-| Architect | Opus | high | Deep reasoning about system design |
-| Skeptic | Opus | high | Surfaces non-obvious gaps |
-| Security | Sonnet | medium | Pattern matching against known concerns |
-| OSS Adoptability | Sonnet | medium | Checklist-style usability review |
-| MVP Scope | Sonnet | medium | Judgment against clear criteria |
-| Domain Expert | Opus | high | Domain reasoning benefits from deeper thinking |
-| Legal & Compliance | Sonnet | medium | Pattern recognition against known compliance concerns |
-| Operator | Sonnet | medium | Checklist-style operability review |
-| Test Strategy | Sonnet | medium | Checklist-style testability review |
-| Ambiguity Auditor | Opus | high | Exhaustive fork enumeration across all reviewer findings |
-| Synthesis | Opus | high | Reasoning across conflicting inputs |
-
-Budget-conscious option: run all personas on Sonnet first. Upgrade 
-Architect and Skeptic to Opus if output feels shallow. The difference 
-is most pronounced for ambiguity detection and architectural reasoning.
+`02-setup/examples/ai-radar/` contains the full CLAUDE.md and playbook notes from the
+ai-radar project — a real project built with this framework. Use it as a template and
+adapt to your stack.
 
 ---
 
@@ -193,58 +80,8 @@ This framework is designed to grow with your team:
 
 | Level | What it looks like |
 |---|---|
-| **Level 1** | Manual copy-paste from this repo. Validated prompts, consistent structure. |
+| **Level 1** | Manual copy-paste. Validated prompts, consistent structure. |
 | **Level 2** | Slash commands: `/review-pr 42 architect`. Prompt construction automated. |
-| **Level 3** | GitHub Actions trigger on PR label. Fully headless, results posted automatically. |
+| **Level 3** | GitHub Actions trigger on PR label. Fully headless. |
 
-The repo is currently at **Level 1**. The `.claude/commands/review-pr.md` 
-stub documents the Level 2 upgrade path.
-
----
-
-## Contributing
-
-This framework was designed to be extended. Contributions welcome:
-
-- **New personas** — add a file to `personas/` following the existing format
-- **New workflows** — add a file to `workflows/` for different PR types
-- **Prompt improvements** — open a PR with before/after scorecard data showing the improvement
-- **Scorecard refinements** — the evaluation framework is v0.1 and will improve with use
-
----
-
-## Background
-
-This framework was developed while building [ai-radar](https://github.com/your-org/ai-radar), 
-a personal AI news briefing pipeline. The agentic development workflow — 
-spec first, multi-agent review, issue-driven implementation — is documented 
-in that project's `AGENTS.md`.
-
-The core insight: **GitHub as agent memory and coordination layer**. 
-Issues, PRs, and structured comments are the interface between stateless 
-agent sessions and a stateful project. That pattern scales from a personal 
-tool to an engineering org.
-
----
-
-## Relationship to everything-claude-code and oh-my-claudecode
-
-This framework focuses on **spec and design review** — the phase before 
-implementation begins. For implementation (code) PRs, we recommend 
-combining this framework with the battle-tested agents from 
-[everything-claude-code](https://github.com/affaan-m/everything-claude-code),
-particularly their code-reviewer, security-reviewer, and language-specific 
-reviewer agents.
-
-The two frameworks cover different phases of the development lifecycle:
-- ai-review-protocols → spec review → resolve ambiguity early
-- everything-claude-code → code review → catch bugs and security issues
-
-[oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) is a 
-full multi-agent orchestration platform for Claude Code. If you want 
-automated pipeline execution (Autopilot, Team mode, parallel agents), 
-it's the right tool. ai-review-protocols is intentionally narrower — 
-a focused spec-review protocol with evaluation built in. The two are 
-complementary: use oh-my-claudecode to orchestrate your implementation 
-workflow, use ai-review-protocols to validate your spec before that 
-workflow begins.
+The framework is currently at Level 1 with stubs for Level 2 slash commands.
