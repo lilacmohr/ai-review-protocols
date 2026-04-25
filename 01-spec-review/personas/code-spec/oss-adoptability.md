@@ -24,9 +24,9 @@ follow the setup steps, and have a working daily briefing within 30 minutes?**
 ## What to Look For
 
 **Setup realism**
-- Is the Gmail OAuth setup actually achievable by a non-expert? 
-  OAuth flows require creating a Google Cloud project, enabling APIs, 
-  and generating credentials — is this documented or assumed?
+- Are all external account signups and authentication flows required by the setup explicitly documented?
+  OAuth flows, API key generation, and third-party service accounts are commonly underdocumented —
+  is each one spelled out or assumed?
 - Are all required API keys and accounts listed explicitly?
 - Are there any setup steps that are implied but not stated?
 
@@ -44,11 +44,11 @@ follow the setup steps, and have a working daily briefing within 30 minutes?**
 - Are there any system-level dependencies (non-Python tools) that 
   aren't mentioned?
 
-**GitHub Actions usability**
-- Is the GitHub Actions trigger actually usable by someone without 
-  local infrastructure?
-- Are the required GitHub Secrets documented?
-- Would a new user know how to set up secrets in their forked repo?
+**Automation trigger usability**
+- Is the automated trigger (cron, webhook, CI/CD) actually usable by someone
+  reproducing this from scratch, or does it depend on infrastructure they'd have to set up separately?
+- Are all required secrets and configuration values for the trigger documented?
+- Would a new user know how to configure the trigger in their own environment?
 
 **First-run experience**
 - What does a new user see on first run?

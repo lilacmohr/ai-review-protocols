@@ -30,7 +30,7 @@ Read the full spec before scoring. For large specs (>500 lines), read in section
 
 ## The Scoring Rubric
 
-Score each dimension 1–10. See `references/rubric.md` for detailed criteria per score.
+Score each dimension 1–10. See `rubric.md` for detailed criteria per score.
 
 | # | Dimension | Weight | Core question |
 |---|---|---|---|
@@ -128,4 +128,4 @@ as the highest-impact gap regardless of which dimension it falls under.
 
 ## Reference Files
 
-- `references/rubric.md` — Detailed scoring criteria with examples for each score level
+- `rubric.md` — Detailed scoring criteria with examples for each score level

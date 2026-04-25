@@ -37,7 +37,7 @@ Your primary question: **"How will we know this actually works?"**
   could you write a test that verifies it's correctly implemented?
 
 **External dependency testing**
-- How are external API calls (Gmail, LLM backend, ArXiv) handled 
+- How are external API calls (data sources, LLM backend, delivery channels) handled 
   in tests? Is there a mocking or fixture strategy?
 - If tests require real API credentials to run, that's a problem — 
   is there a strategy for credential-free testing?
@@ -63,7 +63,7 @@ Your primary question: **"How will we know this actually works?"**
 **Cache and state testing**
 - Is the deduplication behavior testable? Can you verify that duplicate 
   content is correctly identified and skipped?
-- Is the SQLite cache schema tested for correctness?
+- Is the data store schema or structure tested for correctness?
 - Are there tests for cache TTL behavior?
 
 **Configuration testing**
@@ -78,10 +78,9 @@ Your primary question: **"How will we know this actually works?"**
   (rate limits, auth expiry, empty results)?
 
 **Test infrastructure**
-<!-- Customize: replace the file names below with the test file structure 
-from your spec, if specified. Remove this section if the spec doesn't name test files. -->
-- The spec lists `tests/test_sources.py`, `test_processing.py`, 
-  `test_llm.py` — does this structure reflect a coherent test strategy 
+<!-- Customize: if the spec names specific test files, replace the placeholder 
+below with those names. Remove the placeholder line if no test files are named. -->
+- If the spec names test files, does the structure reflect a coherent test strategy 
   or just a file-per-module convention?
 - Is there CI configuration that runs tests automatically?
 - Is there a coverage target or coverage reporting strategy?

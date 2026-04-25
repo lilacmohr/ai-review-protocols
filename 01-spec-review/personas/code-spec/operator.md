@@ -25,10 +25,10 @@ look like, and is it good enough to actually run this thing reliably?"**
 
 **Failure visibility**
 - When the pipeline fails, how does the operator find out?
-  *(email? log file? digest just doesn't appear? GitHub Actions red X?)*
+  *(email? log file? digest just doesn't appear? alerting system?)*
 - Are failure modes silent (nothing happens, no output) or loud 
   (explicit error with actionable message)?
-- For each external dependency (Gmail API, LLM backend, ArXiv), 
+- For each external dependency (sources, LLM backend, delivery channel), 
   what does the operator see if that dependency is unavailable?
 - Is there a distinction between "no content today" (normal) and 
   "pipeline failed" (abnormal)? Would an operator be able to tell them apart?
@@ -40,7 +40,7 @@ look like, and is it good enough to actually run this thing reliably?"**
   without re-running it?
 - Are LLM API calls logged in a way that lets you diagnose cost spikes 
   or unexpected behavior?
-- Is the SQLite cache inspectable without writing custom code?
+- Is local state (cache, deduplication store, run history) inspectable without writing custom code?
 
 **Recovery procedures**
 - If the pipeline fails mid-run, what state is the system left in?
@@ -63,8 +63,8 @@ look like, and is it good enough to actually run this thing reliably?"**
   it ran successfully?
 - Is there a mechanism for alerting on unexpected cost spikes 
   (e.g. LLM API spending more than expected)?
-- For GitHub Actions deployment: are there notifications configured 
-  for workflow failures?
+- Is there a notification or alerting mechanism for pipeline failures that 
+  doesn't require the operator to proactively check?
 
 **First-run and onboarding operations**
 - Is the first-run experience documented? What should the operator 

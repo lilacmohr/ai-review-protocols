@@ -31,22 +31,21 @@ credentials in committed files, or data leaking to unintended destinations.
 - Is there any risk of secrets being committed accidentally 
   (e.g. debug output, stack traces)?
 
-**OAuth and API access scope**
-- Is the Gmail OAuth scope minimal? It should be `gmail.readonly` — 
-  flag anything broader.
-- Are API keys scoped to the minimum permissions needed?
-- Is there a token refresh strategy? What happens when OAuth tokens expire?
+**API access scope**
+- Are API keys and OAuth tokens scoped to the minimum permissions needed?
+- Is there a token refresh or rotation strategy? What happens when tokens expire?
+- Are any credentials granted broader access than the spec actually requires?
 
-**GitHub Actions secrets**
-- If the pipeline runs in GitHub Actions, how are secrets injected?
-- Is there any risk of secrets appearing in workflow logs?
-- Are secrets masked in output?
+**Deployment secrets**
+- How are secrets injected into the running process? Is the injection mechanism itself secure?
+- Is there any risk of secrets appearing in logs or output?
+- Is each secret independently rotatable, or does rotating one require touching others?
 
 **Data handling**
 - Does the digest output ever include raw API responses that might 
   contain credentials or PII?
-- Is the SQLite cache stored in a location that won't be accidentally committed?
-- Is `cache/` in `.gitignore`?
+- Is any locally cached data stored in a location that could be accidentally committed?
+- Is the cache or data directory explicitly excluded from version control?
 
 **Third-party data exposure**
 - What data is sent to the LLM backend? Is the user aware that article 

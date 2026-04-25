@@ -63,9 +63,9 @@ Regardless of your primary lens, explicitly scan for ambiguity using
 these four sub-lenses. Label these findings `[AMBIGUITY]`:
 
 - **Undefined behavior** — what happens in edge cases the spec doesn't address?
-  *(e.g. "what happens if the Gmail API returns no emails?")*
+  *(e.g. "what happens if the source API returns no results?")*
 - **Implicit assumptions** — what must be true for this to work that isn't stated?
-  *(e.g. "this assumes trafilatura can extract clean text from all newsletter formats")*
+  *(e.g. "this assumes the content extraction step handles all input formats consistently")*
 - **Underspecified interfaces** — where would two implementers make different reasonable choices?
   *(e.g. "the Source ABC doesn't specify whether fetch() should raise or return empty list on failure")*
 - **Missing failure modes** — what can go wrong with no specified handling?
@@ -75,7 +75,7 @@ Also flag **false precision** — numbers or details stated confidently that hav
 
 Config placeholder numbers (e.g. `max_articles: 30`) are the least interesting form of false precision — if you flag them, consolidate all instances into a single comment rather than filing them separately.
 
-*(e.g. "setup time < 30 minutes — does this include Gmail OAuth GCP project setup?" is more valuable than "max_articles: 30 — is this a real decision?")*
+*(e.g. "setup time < 30 minutes — does this include all third-party account creation steps?" is more valuable than "max_articles: 30 — is this a real decision?")*
 
 Before including a finding, check whether it appears explicitly in the spec's own Open Questions section. If it does, only include it if you have a concrete resolution the spec lacks — otherwise skip it. Echoing back an open question the author already knows about adds noise without value.
 
