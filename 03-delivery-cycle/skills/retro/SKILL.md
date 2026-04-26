@@ -93,6 +93,17 @@ the Decision Register? If not, the next agent will hit the same fork.
 
 **Flag:** Spec gaps that were resolved in DECISION issues but not yet patched in SPEC.md.
 
+If the decision was Level 1 or 2 (it will constrain someone else's options) and no
+Decision Record exists, prompt the engineer to run the
+[`capture-decision`](../capture-decision/SKILL.md) skill now. Note that the session
+window is closed — the record will be narrated from memory rather than from live
+context. Flag this in the record's header:
+
+```
+**Note:** Generated post-session from memory. Session context was not available
+at time of capture. Treat assumptions and ruled-out options with extra scrutiny.
+```
+
 ---
 
 ## Output Format
@@ -136,6 +147,7 @@ Each candidate:
 
   → Destination: SPEC.md + Decision Register
   → What to add: [the decision that was made and why]
+  → If no Decision Record exists: prompt capture-decision (post-session fallback)
 
 ────────────────────────────────────────────────────────────
 TOTAL CANDIDATES: N

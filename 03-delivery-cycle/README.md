@@ -127,6 +127,12 @@ Recommendation: [agent's recommendation and why]
 The human resolves it, updates the spec, and the agent continues. The decision is
 recorded in the PR description under "Interface decisions made."
 
+For decisions that will constrain future options beyond this ticket — a service
+boundary choice, a consistency model, a data contract — run the
+[`capture-decision`](skills/capture-decision/SKILL.md) skill before closing the
+session to generate a formal Decision Record. Add a row to the project's
+[Decision Register](../04-decision-records/templates/decision-register.md).
+
 ---
 
 ## Issue Taxonomy
@@ -149,6 +155,7 @@ recorded in the PR description under "Interface decisions made."
 | [`review-tdd-green`](skills/review-tdd-green/SKILL.md) | IMPL PR is open — verify correctness and implementation quality |
 | [`retro`](skills/retro/SKILL.md) | IMPL PR is merged — surface what should be encoded before the next ticket |
 | [`verify-tdd-pairs`](skills/verify-tdd-pairs/SKILL.md) | Audit that every TEST ticket has a paired IMPL ticket (repo health check) |
+| [`capture-decision`](skills/capture-decision/SKILL.md) | End of session — narrate a Level 1 or 2 decision into a Decision Record before closing |
 
 ---
 

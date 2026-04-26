@@ -9,7 +9,7 @@ AI news briefing pipeline developed entirely with this workflow.
 
 ---
 
-## The Three Chapters
+## The Four Chapters
 
 ### [01 — Spec Review](01-spec-review/)
 
@@ -50,6 +50,21 @@ implementation?" after the IMPL ticket closes).
 
 → **Start here if** you're already set up and want to run a repeatable delivery loop
 with AI agents.
+
+---
+
+### [04 — Decision Records](04-decision-records/)
+
+Capture the *why* behind engineering decisions made during AI-assisted sessions —
+before the session closes and the reasoning evaporates. Includes a three-level
+decision granularity model, a narration-first capture workflow, a Decision Record
+template, and a Decision Register for tracking decisions across the project.
+
+Also includes the cross-system probe (interrogate your mental model before touching
+a system you don't own) and architecture quiz (test your understanding of any system).
+
+→ **Use this** when a Level 1 or Level 2 decision was made during a session, before
+touching a service boundary, or when onboarding to an unfamiliar system.
 
 ---
 

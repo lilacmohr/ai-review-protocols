@@ -104,10 +104,15 @@ body:
     attributes:
       value: |
         ---
-        **Process:** 
+        **Process:**
         1. Owner reviews options and posts resolution in the Resolution field above.
         2. Check the follow-up actions that apply and complete them before closing:
            - [ ] Update SPEC.md if the decision changes documented behavior
            - [ ] Update CLAUDE.md if the decision changes agent conventions or constraints
            - [ ] Update the blocked issue with a Playbook Note capturing the decision
+           - [ ] If this decision is Level 1 or 2 (it will constrain someone else's options
+                 six months from now): run the `capture-decision` skill with this ticket as
+                 context, commit the Decision Record alongside the code change, and link it here.
+                 Use the options table and resolution rationale above as your narration input —
+                 you only need to add the assumptions and revisit signals.
         3. Close this issue and unblock the linked issue.
