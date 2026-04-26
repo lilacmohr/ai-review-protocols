@@ -30,22 +30,36 @@ Your job is to write it clearly, completely, and without ambiguity.
 
 ## Setup
 
-Read the synthesis comment:
+Read all PR comments:
 
 ```
 gh pr view $PR_NUMBER --comments
 ```
+
+**Use only two sources from the comment thread:**
+
+1. **The `## 🎯 Synthesis Review` comment** — this is your primary input. It contains
+   the consolidated, prioritized action list and Decision Register from all ten reviewer
+   agents. Ignore the ten individual reviewer comments entirely — the Synthesis Agent has
+   already aggregated them. Working from raw reviewer comments would re-introduce noise
+   the Synthesis Agent filtered out.
+
+2. **Human decision comments** — any comment that resolves a `[HUMAN DECISION]` item
+   from the synthesis. Look for comments that name a fork from the Decision Register and
+   state the chosen interpretation.
+
+If no `## 🎯 Synthesis Review` comment exists, stop — do not attempt to synthesize
+from the raw reviewer comments. Run `spec-reviews-synthesis-agent.md` first.
+
+If any `[HUMAN DECISION]` item in the synthesis has no documented resolution in the
+PR thread, **do not guess**. List the unresolved items and stop — do not proceed with
+revision until they are resolved.
 
 Read the spec:
 
 ```
 cat $SPEC_FILE
 ```
-
-Read any human decisions posted in the PR thread. Look for comments that resolve
-`[HUMAN DECISION]` items — these are required inputs. If any `[HUMAN DECISION]`
-item has no documented resolution, **do not guess**. List unresolved items and
-stop — do not proceed with revision until they are resolved.
 
 ## Scope of Changes
 
@@ -139,9 +153,3 @@ design judgment, no clear bounded change). Keep this short.}
 ```
 
 **Do not approve or merge the PR.**
-
-## If the Synthesis Comment Is Missing
-
-If no `## 🎯 Synthesis Review` comment exists on the PR, stop. Do not attempt
-to synthesize from raw reviewer comments — run `spec-reviews-synthesis-agent.md`
-first, then return to this agent.
